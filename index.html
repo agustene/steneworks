@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SteneWorks — Jasa Joki Tugas Terpercaya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#03045E;
+    --navy-deep:#020340;
+    --blue:#023EBA;
+    --cyan:#00B4D8;
+    --pale:#CAF0F8;
+    --orange:#FBB02D;
+    --ink:#eaf2ff;
+    --ink-dim:#9fb3d9;
+    --glass-fill: rgba(255,255,255,0.07);
+    --glass-fill-strong: rgba(255,255,255,0.12);
+    --glass-border: rgba(255,255,255,0.18);
+
+    --space-xs: 8px;
+    --space-sm: 16px;
+    --space-md: 24px;
+    --space-lg: 40px;
+    --space-xl: 64px;
+    --space-2xl: 88px;
+    --radius: 20px;
+    --container: 1180px;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Inter', sans-serif;
+    background: var(--navy);
+    color: var(--ink);
+    overflow-x:hidden;
+    line-height:1.65;
+    font-size:16px;
+  }
+  h1,h2,h3,h4{font-family:'Sora', sans-serif; letter-spacing:-0.01em; line-height:1.2;}
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  ul{list-style:none;}
+  button{font-family:inherit;}
+  ::selection{background:var(--cyan); color:var(--navy-deep);}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+
+  /* Tambahan CSS untuk efek Spotlight Glow */
+  .glass.service-card, 
+  .glass.about-card, 
+  .glass.step, 
+  .glass.testi-card {
+    position: relative;
+    overflow: hidden; /* Supaya cahaya nggak keluar dari batas card */
+  }
+
+  /* Elemen lampu di belakang yang bakal mengikuti kursor */
+  .glass.service-card,
+  .glass.about-card,
+  .glass.step,
+  .glass.testi-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+
+  .glass.service-card:hover,
+  .glass.about-card:hover,
+  .glass.step:hover,
+  .glass.testi-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 40px rgba(0, 180, 216, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    border-color: rgba(0, 180, 216, 0.5);
+  }
+
+  /* ===== Background scene ===== */
+  .ocean-bg{
+    position:fixed; inset:0; z-index:-2;
+    background:
+      radial-gradient(ellipse 90% 60% at 15% -10%, rgba(0,180,216,0.32), transparent 60%),
+      radial-gradient(ellipse 70% 50% at 100% 8%, rgba(2,62,186,0.5), transparent 60%),
+      linear-gradient(190deg, var(--navy) 0%, var(--navy-deep) 55%, #010226 100%);
+  }
+  .blob{
+    position:fixed; border-radius:50%; filter:blur(80px); z-index:-1; opacity:0.45;
+    pointer-events:none;
+  }
+  .blob-1{width:520px; height:520px; background:var(--cyan); top:-160px; left:-180px; animation:drift1 24s ease-in-out infinite;}
+  .blob-2{width:420px; height:420px; background:var(--blue); bottom:-140px; right:-160px; animation:drift2 28s ease-in-out infinite;}
+  .blob-3{width:280px; height:280px; background:var(--orange); opacity:0.1; top:40%; right:10%; animation:drift1 32s ease-in-out infinite reverse;}
+  @keyframes drift1{0%,100%{transform:translate(0,0);} 50%{transform:translate(36px,44px);}}
+  @keyframes drift2{0%,100%{transform:translate(0,0);} 50%{transform:translate(-44px,-26px);}}
+
+  .bubbles{position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden;}
+  .bubble{
+    position:absolute; bottom:-10%; border-radius:50%;
+    background:radial-gradient(circle at 32% 28%, rgba(255,255,255,0.5), rgba(255,255,255,0.05) 60%, transparent 70%);
+    border:1px solid rgba(255,255,255,0.22);
+    animation-name:rise; animation-timing-function:linear; animation-iteration-count:infinite;
+  }
+  @keyframes rise{
+    0%{transform:translateY(0) translateX(0);}
+    50%{transform:translateY(-55vh) translateX(18px);}
+    100%{transform:translateY(-115vh) translateX(-10px); opacity:0;}
+  }
+
+  /* ===== Glass utility ===== */
+  .glass{
+    background:var(--glass-fill);
+    border:1px solid var(--glass-border);
+    backdrop-filter:blur(18px) saturate(140%);
+    -webkit-backdrop-filter:blur(18px) saturate(140%);
+    border-radius:var(--radius);
+    box-shadow: 0 8px 32px rgba(1,4,40,0.35), inset 0 1px 0 rgba(255,255,255,0.14);
+  }
+
+  .wrap{max-width:var(--container); margin:0 auto; padding:0 28px;}
+  @media(max-width:560px){.wrap{padding:0 20px;}}
+
+  /* ===== Nav ===== */
+  header{
+    position:sticky; top:0; z-index:60;
+    background:rgba(3,4,94,0.6);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    border-bottom:1px solid rgba(255,255,255,0.08);
+  }
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 28px; max-width:var(--container); margin:0 auto; gap:20px;
+  }
+  .brand{display:flex; align-items:center; gap:10px; font-family:'Sora'; font-weight:700; font-size:1.12rem; white-space:nowrap;}
+  .brand-mark{
+    width:36px; height:36px; border-radius:10px; flex-shrink:0;
+    background:linear-gradient(135deg, var(--cyan), var(--blue));
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.05rem; font-weight:800; color:#fff;
+    box-shadow:0 0 18px rgba(0,180,216,0.5);
+  }
+  .nav-links{display:flex; gap:30px; font-size:0.93rem; color:var(--ink-dim); align-items:center;}
+  .nav-links a{transition:color .15s ease;}
+  .nav-links a:hover{color:var(--pale);}
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    padding:12px 24px; border-radius:12px; font-weight:600; font-size:0.92rem;
+    cursor:pointer; border:none; transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+    white-space:nowrap;
+  }
+  .btn-cta{
+    background:linear-gradient(135deg, var(--orange), #ffca6b);
+    color:#2b1b00;
+    box-shadow:0 6px 20px rgba(251,176,45,0.38);
+  }
+  .btn-cta:hover{transform:translateY(-2px); box-shadow:0 10px 26px rgba(251,176,45,0.48);}
+  .btn-ghost{
+    background:var(--glass-fill-strong); color:var(--ink); border:1px solid var(--glass-border);
+  }
+  .btn-ghost:hover{background:rgba(255,255,255,0.18);}
+  .btn-small{padding:9px 18px; font-size:0.85rem;}
+
+  .nav-right{display:flex; align-items:center; gap:14px; flex-shrink:0;}
+  .menu-toggle{
+    display:none; background:var(--glass-fill-strong); border:1px solid var(--glass-border);
+    color:var(--ink); font-size:1.1rem; width:40px; height:40px; border-radius:10px;
+    align-items:center; justify-content:center; cursor:pointer;
+  }
+  .mobile-panel{
+    display:none; flex-direction:column; gap:4px;
+    padding:14px 20px 20px; border-top:1px solid rgba(255,255,255,0.08);
+  }
+  .mobile-panel a{padding:12px 4px; font-size:0.95rem; color:var(--ink-dim); border-bottom:1px solid rgba(255,255,255,0.06);}
+  .mobile-panel a:last-of-type{border-bottom:none;}
+  .mobile-panel.open{display:flex;}
+
+  @media(max-width:860px){
+    .nav-links{display:none;}
+    .menu-toggle{display:flex;}
+  }
+
+  /* ===== Hero ===== */
+  .hero{
+    padding:var(--space-2xl) 0 var(--space-xl);
+    display:grid; grid-template-columns:1.05fr 0.95fr; gap:56px; align-items:center;
+  }
+  @media(max-width:960px){
+    .hero{grid-template-columns:1fr; padding-top:var(--space-xl); gap:var(--space-lg);}
+  }
+
+  .eyebrow-pill{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:8px 16px; border-radius:999px; font-size:0.82rem; color:var(--pale);
+    margin-bottom:var(--space-md);
+  }
+  .eyebrow-pill .dot{width:7px; height:7px; border-radius:50%; background:var(--cyan); box-shadow:0 0 8px var(--cyan); flex-shrink:0;}
+
+  .hero h1{
+    font-size:clamp(2.2rem, 4.6vw, 3.3rem);
+    font-weight:800; margin-bottom:var(--space-md);
+    color:#fff;
+  }
+  .hero h1 .accent{
+    background:linear-gradient(100deg, var(--cyan), var(--pale));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero p.lede{
+    font-size:1.06rem; color:var(--ink-dim); max-width:500px; margin-bottom:var(--space-lg);
+  }
+  .hero-actions{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:var(--space-lg);}
+  .stat-row{display:flex; gap:40px; flex-wrap:wrap;}
+  .stat-item{min-width:100px;}
+  .stat-num{font-family:'Sora'; font-size:1.65rem; font-weight:700; color:#fff; margin-bottom:2px;}
+  .stat-label{font-size:0.83rem; color:var(--ink-dim);}
+
+  .hero-visual{position:relative; padding:34px 24px 24px;}
+  .hero-card{padding:26px;}
+  .hero-card-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; gap:12px;}
+  .hero-card-top .badge{
+    background:rgba(0,180,216,0.18); color:var(--pale); font-size:0.73rem;
+    padding:5px 12px; border-radius:999px; border:1px solid rgba(0,180,216,0.4); white-space:nowrap;
+  }
+  .order-row{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 0; border-bottom:1px solid rgba(255,255,255,0.09);
+  }
+  .order-row:last-child{border-bottom:none; padding-bottom:2px;}
+  .order-row > div{width:100%;}
+  .order-name{font-weight:600; font-size:0.92rem; margin-bottom:3px;}
+  .order-sub{font-size:0.78rem; color:var(--ink-dim); margin-bottom:8px;}
+  .progress-track{width:100%; height:6px; border-radius:99px; background:rgba(255,255,255,0.12); overflow:hidden;}
+  .progress-fill{height:100%; border-radius:99px; background:linear-gradient(90deg, var(--cyan), var(--blue));}
+
+  .floating-chip{
+    position:absolute; padding:11px 16px; display:flex; align-items:center; gap:9px;
+    font-size:0.8rem; white-space:nowrap;
+  }
+  .chip-1{top:0; right:4px;}
+  .chip-2{bottom:0; left:4px;}
+  .star-mini{color:var(--orange);}
+  @media(max-width:960px){
+    .hero-visual{padding-top:44px; padding-bottom:34px;}
+  }
+  @media(max-width:480px){
+    .floating-chip{font-size:0.72rem; padding:9px 12px;}
+  }
+
+  /* ===== Section shell ===== */
+  section{padding:var(--space-2xl) 0;}
+  .section-head{max-width:600px; margin-bottom:var(--space-xl);}
+  .section-tag{color:var(--cyan); font-size:0.85rem; font-weight:600; margin-bottom:10px; display:block;}
+  .section-head h2{font-size:clamp(1.6rem,2.8vw,2.3rem); color:#fff; margin-bottom:14px;}
+  .section-head p{color:var(--ink-dim); font-size:1rem;}
+
+  /* ===== About ===== */
+  .about-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-md);}
+  @media(max-width:940px){.about-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:560px){.about-grid{grid-template-columns:1fr;}}
+  .about-card{padding:28px 24px;}
+  .about-icon{
+    width:46px; height:46px; border-radius:12px; margin-bottom:var(--space-sm);
+    display:flex; align-items:center; justify-content:center; font-size:1.3rem;
+    background:linear-gradient(135deg, rgba(0,180,216,0.35), rgba(2,62,186,0.35));
+    border:1px solid rgba(0,180,216,0.3);
+  }
+  .about-card h3{font-size:1.02rem; margin-bottom:8px; color:#fff;}
+  .about-card p{font-size:0.88rem; color:var(--ink-dim);}
+
+  /* ===== Services / Products ===== */
+  .services-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-md);}
+  @media(max-width:940px){.services-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:640px){.services-grid{grid-template-columns:1fr;}}
+  .service-card{padding:0; overflow:hidden; display:flex; flex-direction:column;}
+  .service-top{
+    padding:22px 24px 18px; display:flex; justify-content:space-between; align-items:flex-start; gap:10px;
+    border-bottom:1px solid rgba(255,255,255,0.09);
+  }
+  .subj-icon{
+    width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-family:'Sora'; color:#fff; font-size:0.85rem; flex-shrink:0;
+  }
+  .popular-tag{
+    font-size:0.7rem; background:rgba(251,176,45,0.2); color:var(--orange);
+    padding:5px 11px; border-radius:999px; border:1px solid rgba(251,176,45,0.4); font-weight:600; white-space:nowrap;
+  }
+  .service-body{padding:20px 24px 24px; flex:1; display:flex; flex-direction:column;}
+  .service-body h3{color:#fff; font-size:1.06rem; margin-bottom:8px;}
+  .service-body p{color:var(--ink-dim); font-size:0.86rem; margin-bottom:18px;}
+  .service-feats{margin-bottom:20px; flex:1;}
+  .service-feats li{
+    font-size:0.85rem; color:var(--pale); padding-left:22px; position:relative; margin-bottom:9px;
+  }
+  .service-feats li::before{
+    content:"✓"; position:absolute; left:0; color:var(--cyan); font-weight:700;
+  }
+  .service-foot{display:flex; align-items:center; justify-content:space-between; padding-top:18px; border-top:1px solid rgba(255,255,255,0.09); gap:12px;}
+  .price{font-family:'Sora'; font-weight:700; font-size:1.1rem; color:#fff; line-height:1.3;}
+  .price span{display:block; font-size:0.73rem; color:var(--ink-dim); font-weight:400;}
+
+  /* ===== Process ===== */
+  .process{display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-md);}
+  @media(max-width:940px){.process{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:560px){.process{grid-template-columns:1fr;}}
+  .step{padding:28px 24px;}
+  .step-num{
+    font-family:'Sora'; font-size:2.1rem; font-weight:800;
+    background:linear-gradient(135deg, var(--cyan), var(--blue));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    margin-bottom:12px; display:block;
+  }
+  .step h3{color:#fff; font-size:1rem; margin-bottom:8px;}
+  .step p{color:var(--ink-dim); font-size:0.85rem;}
+
+  /* ===== Testimonials ===== */
+  .rating-summary{
+    display:flex; align-items:center; gap:32px; padding:30px 32px; margin-bottom:var(--space-lg); flex-wrap:wrap;
+  }
+  .rating-big{font-family:'Sora'; font-size:2.9rem; font-weight:800; color:#fff; line-height:1;}
+  .stars{color:var(--orange); font-size:1.05rem; letter-spacing:2px; margin-top:6px;}
+  .rating-summary .divider{width:1px; height:50px; background:rgba(255,255,255,0.15);}
+  .rating-bars{flex:1; min-width:220px;}
+  .rating-bar-row{display:flex; align-items:center; gap:10px; font-size:0.8rem; color:var(--ink-dim); margin-bottom:6px;}
+  .rating-bar-row:last-child{margin-bottom:0;}
+  .rating-bar-track{width:150px; height:6px; border-radius:99px; background:rgba(255,255,255,0.12); overflow:hidden; flex-shrink:0;}
+  .rating-bar-fill{height:100%; background:var(--orange); border-radius:99px;}
+  .rating-total .stat-num{margin-bottom:2px;}
+
+  .testi-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-md);}
+  @media(max-width:940px){.testi-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:640px){.testi-grid{grid-template-columns:1fr;}}
+  .testi-card{padding:24px; display:flex; flex-direction:column; gap:14px;}
+  .testi-stars{color:var(--orange); font-size:0.9rem; letter-spacing:2px;}
+  .testi-text{font-size:0.9rem; color:var(--ink); flex:1;}
+  .testi-user{display:flex; align-items:center; gap:12px;}
+  .avatar{
+    width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-family:'Sora'; font-weight:700; font-size:0.85rem; color:#fff; flex-shrink:0;
+    background:linear-gradient(135deg, var(--blue), var(--cyan));
+  }
+  section#testimoni {
+    padding: var(--space-lg) 0;
+  }
+  .testi-name{font-size:0.85rem; font-weight:600; color:#fff;}
+  .testi-game{font-size:0.75rem; color:var(--ink-dim);}
+
+  /* ===== CTA band ===== */
+  .cta-band{
+    padding:60px 40px; text-align:center;
+    margin-bottom: var(--space-2xl);
+  }
+  .cta-band h2{color:#fff; font-size:clamp(1.5rem,2.8vw,2.1rem); margin-bottom:14px;}
+  .cta-band p{color:var(--pale); max-width:480px; margin:0 auto var(--space-md); font-size:0.98rem;}
+  .cta-band .btn{margin-top:6px;}
+
+  /* ===== Footer ===== */
+  footer{padding:64px 0 28px; border-top:1px solid rgba(255,255,255,0.08); margin-top:var(--space-lg);}
+  .footer-grid{display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr; gap:40px; margin-bottom:var(--space-xl);}
+  @media(max-width:760px){.footer-grid{grid-template-columns:1fr 1fr; gap:32px;}}
+  @media(max-width:480px){.footer-grid{grid-template-columns:1fr;}}
+  .footer-col h4{color:#fff; font-size:0.92rem; margin-bottom:16px;}
+  .footer-col p{color:var(--ink-dim); font-size:0.85rem; max-width:260px;}
+  .footer-col ul{display:flex; flex-direction:column; gap:11px;}
+  .footer-col a{color:var(--ink-dim); font-size:0.85rem; transition:color .15s ease;}
+  .footer-col a:hover{color:var(--pale);}
+  .footer-bottom{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
+    font-size:0.8rem; color:var(--ink-dim); padding-top:26px; border-top:1px solid rgba(255,255,255,0.07);
+  }
+
+  @media(max-width:600px){
+    section{padding:var(--space-xl) 0;}
+  }
+</style>
+</head>
+<body>
+
+<div class="ocean-bg"></div>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+<div class="bubbles" id="bubbles"></div>
+
+<header>
+  <nav>
+    <div class="brand">
+      <div class="brand-mark">S</div>
+      SteneWorks
+    </div>
+    <div class="nav-links">
+      <a href="#tentang">Tentang</a>
+      <a href="#layanan">Layanan</a>
+      <a href="#proses">Cara Kerja</a>
+      <a href="#testimoni">Testimoni</a>
+    </div>
+    <div class="nav-right">
+      <a href="#layanan" class="btn btn-cta" style="display:none;" id="navCta">Pesan Sekarang</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Buka menu">☰</button>
+    </div>
+  </nav>
+  <div class="mobile-panel" id="mobilePanel">
+    <a href="#tentang">Tentang</a>
+    <a href="#layanan">Layanan</a>
+    <a href="#proses">Cara Kerja</a>
+    <a href="#testimoni">Testimoni</a>
+    <a href="#layanan" class="btn btn-cta" style="margin-top:10px; width:fit-content;">Pesan Sekarang</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero wrap">
+    <div>
+      <div class="glass eyebrow-pill"><span class="dot"></span> Joki tugas online, 24 jam siap bantu</div>
+      <h1>Deadline mepet, tugas numpuk? <span class="accent">Serahkan ke kami.</span></h1>
+      <p class="lede">SteneWorks mengerjakan tugas kuliah, makalah, laporan, sampai program — ditulis dari nol oleh penulis berpengalaman di bidangnya, bebas plagiarisme, dan tepat waktu.</p>
+      <div class="hero-actions">
+        <a href="#layanan" class="btn btn-cta">Lihat Layanan</a>
+        <a href="#testimoni" class="btn btn-ghost">Cek Rating Pengguna</a>
+      </div>
+      <div class="stat-row">
+        <div class="stat-item">
+          <div class="stat-num">8.700+</div>
+          <div class="stat-label">Tugas selesai</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">4.9/5</div>
+          <div class="stat-label">Rating rata-rata</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">97%</div>
+          <div class="stat-label">Selesai sebelum deadline</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="glass hero-card">
+        <div class="hero-card-top">
+          <div>
+            <div class="order-name">Tugas Aktif</div>
+            <div class="order-sub">#SW-20481</div>
+          </div>
+          <div class="badge">Sedang Dikerjakan</div>
+        </div>
+        <div class="order-row">
+          <div>
+            <div class="order-name">Makalah Ekonomi Makro · Bab 3</div>
+            <div class="order-sub">Estimasi selesai 6 jam lagi</div>
+            <div class="progress-track"><div class="progress-fill" style="width:64%"></div></div>
+          </div>
+        </div>
+        <div class="order-row">
+          <div>
+            <div class="order-name">Tugas Coding · Sorting Algorithm</div>
+            <div class="order-sub">Estimasi selesai 2 jam lagi</div>
+            <div class="progress-track"><div class="progress-fill" style="width:30%; background:linear-gradient(90deg, var(--orange), #ffd27a);"></div></div>
+          </div>
+        </div>
+        <div class="order-row">
+          <div>
+            <div class="order-name">Slide Presentasi Manajemen · 15 slide</div>
+            <div class="order-sub">Estimasi selesai 40 menit lagi</div>
+            <div class="progress-track"><div class="progress-fill" style="width:88%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="glass floating-chip chip-1"><span class="star-mini">★</span> 4.9 dari 2.900 ulasan</div>
+      <div class="glass floating-chip chip-2">🛡️ Bebas plagiarisme</div>
+    </div>
+  </section>
+
+  <section id="tentang" class="wrap">
+    <div class="section-head">
+      <span class="section-tag">Tentang SteneWorks</span>
+      <h2>Dikerjakan penulis asli, bukan hasil comot sana-sini.</h2>
+      <p>Setiap tugas ditulis dari nol oleh penulis yang paham bidangnya, dicek plagiarisme sebelum dikirim, dan kamu bisa pantau progresnya kapan saja.</p>
+    </div>
+    <div class="about-grid">
+      <div class="glass about-card">
+        <div class="about-icon">🛡️</div>
+        <h3>Bebas Plagiarisme</h3>
+        <p>Setiap naskah dicek similarity sebelum dikirim, dilengkapi laporan hasil cek.</p>
+      </div>
+      <div class="glass about-card">
+        <div class="about-icon">⚡</div>
+        <h3>Proses Cepat</h3>
+        <p>Rata-rata pengerjaan tugas dimulai kurang dari 15 menit setelah pembayaran masuk.</p>
+      </div>
+      <div class="glass about-card">
+        <div class="about-icon">🔁</div>
+        <h3>Revisi Gratis</h3>
+        <p>Revisi tanpa biaya tambahan selama masih sesuai instruksi awal.</p>
+      </div>
+      <div class="glass about-card">
+        <div class="about-icon">🎓</div>
+        <h3>Penulis Berpengalaman</h3>
+        <p>Tim berlatar belakang akademik sesuai bidang studi tugas kamu.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="layanan" class="wrap">
+    <div class="section-head">
+      <span class="section-tag">Layanan</span>
+      <h2>Pilih jenis tugas, kami yang kerjakan.</h2>
+      <p>Harga transparan, tidak ada biaya tersembunyi. Semua paket termasuk laporan progres berkala.</p>
+    </div>
+    <div class="services-grid">
+
+      <div class="glass service-card">
+        <div class="service-top">
+          <div class="subj-icon" style="background:linear-gradient(135deg,#023EBA,#00B4D8);">ME</div>
+          <span class="popular-tag">Terlaris</span>
+        </div>
+        <div class="service-body">
+          <h3>Makalah &amp; Essay</h3>
+          <p>Penulisan makalah, essay, dan tugas mata kuliah semua jurusan.</p>
+          <ul class="service-feats">
+            <li>Referensi jurnal terpercaya</li>
+            <li>Format sesuai pedoman kampus</li>
+            <li>Cek plagiarisme disertakan</li>
+          </ul>
+          <div class="service-foot">
+            <div class="price">Rp210rb <span>/ halaman</span></div>
+            <a href="pesan.html" class="btn btn-cta btn-small">Pesan</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass service-card">
+        <div class="service-top">
+          <div class="subj-icon" style="background:linear-gradient(135deg,#FBB02D,#ff6b6b);">ST</div>
+        </div>
+        <div class="service-body">
+          <h3>Skripsi &amp; Tesis</h3>
+          <p>Bantuan dari bab 1 sampai bab 5, termasuk olah data.</p>
+          <ul class="service-feats">
+            <li>Bimbingan tiap bab</li>
+            <li>Olah data statistik SPSS</li>
+            <li>Pendampingan revisi dosen</li>
+          </ul>
+          <div class="service-foot">
+            <div class="price">Rp2jt <span>/ paket penuh</span></div>
+            <a href="pesan.html" class="btn btn-cta btn-small">Pesan</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass service-card">
+        <div class="service-top">
+          <div class="subj-icon" style="background:linear-gradient(135deg,#00B4D8,#CAF0F8); color:#03045E;">PY</div>
+        </div>
+        <div class="service-body">
+          <h3>Tugas Coding</h3>
+          <p>Program Python, Java, web, hingga tugas basis data.</p>
+          <ul class="service-feats">
+            <li>Kode rapi dan diberi komentar</li>
+            <li>Penjelasan logika program</li>
+            <li>Siap untuk demo tugas</li>
+          </ul>
+          <div class="service-foot">
+            <div class="price">Rp2,5jt <span>/ tugas</span></div>
+            <a href="pesan.html" class="btn btn-cta btn-small">Pesan</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass service-card">
+        <div class="service-top">
+          <div class="subj-icon" style="background:linear-gradient(135deg,#03045E,#023EBA);">PP</div>
+        </div>
+        <div class="service-body">
+          <h3>Presentasi (PPT)</h3>
+          <p>Slide presentasi rapi untuk tugas maupun sidang.</p>
+          <ul class="service-feats">
+            <li>Desain sesuai tema kampus</li>
+            <li>Ringkasan poin per slide</li>
+            <li>Bisa tambah catatan pembicara</li>
+          </ul>
+          <div class="service-foot">
+            <div class="price">Rp35rb/bab <span>/ slide</span></div>
+            <a href="pesan.html" class="btn btn-cta btn-small">Pesan</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass service-card">
+        <div class="service-top">
+          <div class="subj-icon" style="background:linear-gradient(135deg,#00B4D8,#023EBA);">LP</div>
+        </div>
+        <div class="service-body">
+          <h3>Laporan Praktikum</h3>
+          <p>Laporan praktikum lab, PKL, dan magang.</p>
+          <ul class="service-feats">
+            <li>Struktur sesuai format instansi</li>
+            <li>Analisis data dan pembahasan</li>
+            <li>Lampiran rapi dan lengkap</li>
+          </ul>
+          <div class="service-foot">
+            <div class="price">Rp150rb <span>/ laporan</span></div>
+            <a href="pesan.html" class="btn btn-cta btn-small">Pesan</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass service-card">
+        <div class="service-top">
+          <div class="subj-icon" style="background:linear-gradient(135deg,#FBB02D,#023EBA);">PB</div>
+        </div>
+        <div class="service-body">
+          <h3>Paket Bundling</h3>
+          <p>Gabungkan beberapa tugas sekaligus, lebih hemat.</p>
+          <ul class="service-feats">
+            <li>Diskon hingga 10%</li>
+            <li>Satu dashboard untuk semua tugas</li>
+            <li>Prioritas antrean pengerjaan</li>
+          </ul>
+          <div class="service-foot">
+            <div class="price">Custom <span>sesuai kebutuhan</span></div>
+            <a href="konsultasi.html" class="btn btn-cta btn-small">Konsultasi</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="proses" class="wrap">
+    <div class="section-head">
+      <span class="section-tag">Cara Kerja</span>
+      <h2>Empat langkah, dari kirim tugas sampai selesai.</h2>
+    </div>
+    <div class="process">
+      <div class="glass step">
+        <span class="step-num">01</span>
+        <h3>Kirim Detail Tugas</h3>
+        <p>Lampirkan soal, format, dan deadline lewat form order.</p>
+      </div>
+      <div class="glass step">
+        <span class="step-num">02</span>
+        <h3>Bayar Aman</h3>
+        <p>Transfer, e-wallet, atau QRIS — dana ditahan sampai tugas selesai.</p>
+      </div>
+      <div class="glass step">
+        <span class="step-num">03</span>
+        <h3>Tugas Dikerjakan</h3>
+        <p>Penulis mulai bekerja dan kamu pantau progresnya secara berkala.</p>
+      </div>
+      <div class="glass step">
+        <span class="step-num">04</span>
+        <h3>Selesai &amp; Revisi</h3>
+        <p>Terima hasil akhir, ajukan revisi gratis bila diperlukan.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="testimoni" class="wrap">
+    <div class="section-head">
+      <span class="section-tag">Testimoni</span>
+      <h2>Apa kata mereka yang tugasnya sudah kelar bareng kami.</h2>
+    </div>
+
+    <div class="glass rating-summary">
+      <div>
+        <div class="rating-big">4.9</div>
+        <div class="stars">★★★★★</div>
+      </div>
+      <div class="divider"></div>
+      <div class="rating-bars">
+        <div class="rating-bar-row">5 <div class="rating-bar-track"><div class="rating-bar-fill" style="width:88%"></div></div> 88%</div>
+        <div class="rating-bar-row">4 <div class="rating-bar-track"><div class="rating-bar-fill" style="width:9%"></div></div> 9%</div>
+        <div class="rating-bar-row">3 <div class="rating-bar-track"><div class="rating-bar-fill" style="width:2%"></div></div> 2%</div>
+        <div class="rating-bar-row">2 <div class="rating-bar-track"><div class="rating-bar-fill" style="width:1%"></div></div> 1%</div>
+        <div class="rating-bar-row">1 <div class="rating-bar-track"><div class="rating-bar-fill" style="width:0%"></div></div> 0%</div>
+      </div>
+      <div class="divider"></div>
+      <div class="rating-total">
+        <div class="stat-num">2.940</div>
+        <div class="stat-label">Total ulasan</div>
+      </div>
+    </div>
+
+    <div class="testi-grid">
+      <div class="glass testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Makalah 15 halaman selesai dalam dua hari, referensinya lengkap dan lolos cek plagiarisme kampus."</p>
+        <div class="testi-user">
+          <div class="avatar">RD</div>
+          <div>
+            <div class="testi-name">Rendra D.</div>
+            <div class="testi-game">Mahasiswa Ekonomi</div>
+          </div>
+        </div>
+      </div>
+      <div class="glass testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Tugas coding Python-nya rapi, ada komentar di tiap fungsi jadi gampang dijelaskan pas presentasi."</p>
+        <div class="testi-user">
+          <div class="avatar">AS</div>
+          <div>
+            <div class="testi-name">Ayu S.</div>
+            <div class="testi-game">Mahasiswa Informatika</div>
+          </div>
+        </div>
+      </div>
+      <div class="glass testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Bab 3 skripsi kelar tepat waktu sebelum bimbingan, olah data SPSS-nya juga dijelaskan detail."</p>
+        <div class="testi-user">
+          <div class="avatar">FN</div>
+          <div>
+            <div class="testi-name">Farhan N.</div>
+            <div class="testi-game">Mahasiswa Psikologi</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="glass cta-band">
+      <h2>Siap selesaikan tugas tanpa begadang?</h2>
+      <p>Kirim detail tugas sekarang, tim SteneWorks langsung siap kerja dalam hitungan menit.</p>
+      <a href="#layanan" class="btn btn-cta">Pesan Joki Tugas Sekarang</a>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <div class="brand" style="margin-bottom:14px;">
+        <div class="brand-mark">S</div>
+        SteneWorks
+      </div>
+      <p>Jasa joki tugas kuliah terpercaya, dikerjakan langsung oleh penulis berpengalaman sesuai bidang studi.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Layanan</h4>
+      <ul>
+        <li><a href="#layanan">Makalah &amp; Essay</a></li>
+        <li><a href="#layanan">Skripsi &amp; Tesis</a></li>
+        <li><a href="#layanan">Tugas Coding</a></li>
+        <li><a href="#layanan">Presentasi (PPT)</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Perusahaan</h4>
+      <ul>
+        <li><a href="#tentang">Tentang Kami</a></li>
+        <li><a href="#proses">Cara Kerja</a></li>
+        <li><a href="#testimoni">Testimoni</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Kontak</h4>
+      <ul>
+        <li><a href="#">WhatsApp: 0812-3456-7890</a></li>
+        <li><a href="#">Email: halo@steneworks.id</a></li>
+        <li><a href="#">Instagram: @steneworks</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 SteneWorks. Semua hak dilindungi.</span>
+    <span>Dibuat dengan 🌊 untuk para mahasiswa.</span>
+  </div>
+</footer>
+
+<script>
+  const bubbleContainer = document.getElementById('bubbles');
+  const bubbleCount = 14;
+  for (let i = 0; i < bubbleCount; i++) {
+    const b = document.createElement('div');
+    b.className = 'bubble';
+    const size = 8 + Math.random() * 26;
+    b.style.width = size + 'px';
+    b.style.height = size + 'px';
+    b.style.left = Math.random() * 100 + '%';
+    b.style.animationDuration = (14 + Math.random() * 14) + 's';
+    b.style.animationDelay = (Math.random() * -20) + 's';
+    bubbleContainer.appendChild(b);
+  }
+
+  const menuToggle = document.getElementById('menuToggle');
+  const mobilePanel = document.getElementById('mobilePanel');
+  menuToggle.addEventListener('click', () => {
+    mobilePanel.classList.toggle('open');
+    menuToggle.textContent = mobilePanel.classList.contains('open') ? '✕' : '☰';
+  });
+  mobilePanel.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      mobilePanel.classList.remove('open');
+      menuToggle.textContent = '☰';
+    });
+  });
+
+  // Efek Lampu / Glow mengikuti kursor pada Card
+  document.querySelectorAll('.service-card, .about-card, .step, .testi-card').forEach(card => {
+    // Bikin elemen div buat lampunya secara otomatis
+    const glow = document.createElement('div');
+    glow.className = 'card-glow';
+    card.appendChild(glow);
+
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      glow.style.left = `${x}px`;
+      glow.style.top = `${y}px`;
+    });
+  });
+
+  function syncNavCta(){
+    document.getElementById('navCta').style.display = window.innerWidth > 860 ? 'inline-flex' : 'none';
+  }
+  syncNavCta();
+  window.addEventListener('resize', syncNavCta);
+</script>
+
+</body>
+</html>

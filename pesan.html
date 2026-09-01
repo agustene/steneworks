@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pesan Jasa Joki — SteneWorks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#03045E;
+    --navy-deep:#020340;
+    --blue:#023EBA;
+    --cyan:#00B4D8;
+    --pale:#CAF0F8;
+    --orange:#FBB02D;
+    --ink:#eaf2ff;
+    --ink-dim:#9fb3d9;
+    --glass-fill: rgba(255,255,255,0.07);
+    --glass-fill-strong: rgba(255,255,255,0.12);
+    --glass-border: rgba(255,255,255,0.18);
+    --radius: 20px;
+    --container: 700px;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Inter', sans-serif;
+    background: var(--navy);
+    color: var(--ink);
+    line-height:1.65;
+    font-size:16px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  h1,h2,h3{font-family:'Sora', sans-serif; letter-spacing:-0.01em;}
+  a{color:inherit; text-decoration:none;}
+  
+  /* ===== Background scene ===== */
+  .ocean-bg{
+    position:fixed; inset:0; z-index:-2;
+    background:
+      radial-gradient(ellipse 90% 60% at 15% -10%, rgba(0,180,216,0.32), transparent 60%),
+      radial-gradient(ellipse 70% 50% at 100% 8%, rgba(2,62,186,0.5), transparent 60%),
+      linear-gradient(190deg, var(--navy) 0%, var(--navy-deep) 55%, #010226 100%);
+  }
+  .blob{
+    position:fixed; border-radius:50%; filter:blur(80px); z-index:-1; opacity:0.45;
+    pointer-events:none;
+  }
+  .blob-1{width:420px; height:420px; background:var(--cyan); top:-100px; left:-120px;}
+  .blob-2{width:380px; height:380px; background:var(--blue); bottom:-100px; right:-120px;}
+
+  /* ===== Glass Utility ===== */
+  .glass{
+    background:var(--glass-fill);
+    border:1px solid var(--glass-border);
+    backdrop-filter:blur(18px) saturate(140%);
+    -webkit-backdrop-filter:blur(18px) saturate(140%);
+    border-radius:var(--radius);
+    box-shadow: 0 8px 32px rgba(1,4,40,0.35), inset 0 1px 0 rgba(255,255,255,0.14);
+  }
+
+  /* ===== Header Nav Sederhana ===== */
+  header{
+    padding: 20px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    background: rgba(3,4,94,0.5);
+    backdrop-filter: blur(12px);
+  }
+  .brand{display:flex; align-items:center; gap:10px; font-family:'Sora'; font-weight:700; font-size:1.12rem;}
+  .brand-mark{
+    width:34px; height:34px; border-radius:10px;
+    background:linear-gradient(135deg, var(--cyan), var(--blue));
+    display:flex; align-items:center; justify-content:center;
+    font-size:1rem; font-weight:800; color:#fff;
+    box-shadow:0 0 18px rgba(0,180,216,0.5);
+  }
+  .back-home{
+    font-size: 0.88rem;
+    color: var(--ink-dim);
+    transition: color 0.2s;
+  }
+  .back-home:hover{color: var(--pale);}
+
+  /* ===== Form Container ===== */
+  .wrap{max-width:var(--container); margin:40px auto; padding:0 20px; width:100%;}
+  .order-card{padding: 40px 36px;}
+  
+  .order-header{margin-bottom: 30px; text-align: center;}
+  .order-header h1{font-size: clamp(1.6rem, 3vw, 2.2rem); color: #fff; margin-bottom: 8px;}
+  .order-header p{color: var(--ink-dim); font-size: 0.92rem;}
+
+  .form-group{margin-bottom: 22px;}
+  label{display: block; font-size: 0.88rem; font-weight: 600; color: var(--pale); margin-bottom: 8px;}
+  
+  input, select, textarea{
+    width: 100%;
+    padding: 13px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  input:focus, select:focus, textarea:focus{
+    border-color: var(--cyan);
+    background: rgba(255, 255, 255, 0.09);
+  }
+  input::placeholder, textarea::placeholder{color: rgba(159, 179, 217, 0.5);}
+  select option{background: var(--navy-deep); color: #fff;}
+
+  .btn-submit{
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--orange), #ffca6b);
+    color: #2b1b00;
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(251,176,45,0.38);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    margin-top: 10px;
+  }
+  .btn-submit:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px rgba(251,176,45,0.48);
+  }
+
+  /* ===== Footer Sederhana ===== */
+  footer{
+    text-align: center;
+    padding: 24px;
+    font-size: 0.8rem;
+    color: var(--ink-dim);
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  @media(max-width: 540px){
+    .order-card{padding: 24px 20px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="ocean-bg"></div>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<header>
+  <div class="brand">
+    <div class="brand-mark">S</div>
+    SteneWorks
+  </div>
+  <a href="index.html" class="back-home">← Kembali ke Beranda</a>
+</header>
+
+<main class="wrap">
+  <div class="glass order-card">
+    <div class="order-header">
+      <h1>Formulir Pemesanan Tugas</h1>
+      <p>Isi detail tugasmu di bawah ini, tim kami akan segera merespons via WhatsApp.</p>
+    </div>
+
+    <form id="orderForm">
+      <div class="form-group">
+        <label for="nama">Nama Lengkap</label>
+        <input type="text" id="nama" placeholder="Contoh: Rendra Dimas" required>
+      </div>
+
+      <div class="form-group">
+        <label for="whatsapp">Nomor WhatsApp (Aktif)</label>
+        <input type="tel" id="whatsapp" placeholder="Contoh: 081234567890" required>
+      </div>
+
+      <div class="form-group">
+        <label for="layanan">Pilih Jenis Layanan</label>
+        <select id="layanan" required>
+          <option value="" disabled selected>-- Pilih Layanan Tugas --</option>
+          <option value="Makalah & Essay">Makalah & Essay (Rp35rb/hlm)</option>
+          <option value="Skripsi & Tesis">Skripsi & Tesis (Paket Penuh)</option>
+          <option value="Tugas Coding">Tugas Coding / Pemrograman</option>
+          <option value="Presentasi (PPT)">Presentasi / Slide PPT</option>
+          <option value="Laporan Praktikum">Laporan Praktikum / Magang</option>
+          <option value="Paket Bundling">Paket Bundling Custom</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="deadline">Tenggat Waktu (Deadline)</label>
+        <input type="text" id="deadline" placeholder="Contoh: Besok jam 19.00 WIB" required>
+      </div>
+
+      <div class="form-group">
+        <label for="detail">Deskripsi / Detail Tugas</label>
+        <textarea id="detail" rows="5" placeholder="Jelaskan instruksi tugas, jumlah halaman, atau topik yang dikerjakan secara ringkas..." required></textarea>
+      </div>
+
+      <button type="submit" class="btn-submit">Kirim Pesanan ke WhatsApp 🚀</button>
+    </form>
+  </div>
+</main>
+
+<footer>
+  <span>© 2026 SteneWorks. Semua hak dilindungi.</span>
+</footer>
+
+<script>
+  // Script untuk otomatis merangkum isi form dan membukanya ke WhatsApp Admin
+  document.getElementById('orderForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const nama = document.getElementById('nama').value;
+    const whatsapp = document.getElementById('whatsapp').value;
+    const layanan = document.getElementById('layanan').value;
+    const deadline = document.getElementById('deadline').value;
+    const detail = document.getElementById('detail').value;
+
+    
+    const adminPhone = "62882005802954"; 
+
+    const pesan = `Halo SteneWorks, saya ingin memesan jasa joki tugas.%0A%0A` +
+                  `*Nama:* ${nama}%0A` +
+                  `*No WhatsApp:* ${whatsapp}%0A` +
+                  `*Layanan:* ${layanan}%0A` +
+                  `*Deadline:* ${deadline}%0A` +
+                  `*Detail Tugas:* ${detail}`;
+
+    window.open(`https://wa.me/${adminPhone}?text=${pesan}`, '_blank');
+  });
+</script>
+
+</body>
+</html>
